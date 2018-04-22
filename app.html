@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://unpkg.com/vue"></script>
+    <link rel="stylesheet" href="app.css">
+</head>
+
+<body>
+    <div id="app">
+        <!--always must be at least one elemnt inside-->
+        <h1>{{message}}</h1>
+
+        <!-- Because my-component is put inside <li>, 'is' operator must be used -->
+            <!-- This is due to javascript hoisting or DOM reading html before Vue components
+            are called. -->
+        <ul>
+            <li is="my-component" mytext="Matthew"></li>
+        </ul>
+        
+        <button-component></button-component>
+    </div>
+
+    <!-- button counter component template -->
+    <script type="text/x-template" id="my-button-template">
+        <button v-on:click="count++">
+            You clicked me {{count}} times!
+        </button>        
+    </script>
+
+    <script>
+        //defining template and storing as 'MyComponent'
+        const MyComponent = {
+            template: `
+            <li>
+            This is an element {{mytext}}
+            </li>`,
+            props: ['mytext']
+        };
+
+        const ButtonComponent = Vue.component('button-component', {
+            data: function(){
+                return {
+                    count: 0
+                }
+            },
+            template: '#my-button-template'
+        });
+        
+
+        new Vue({
+            el: "#app",
+            data() {
+                //return object with message
+                return {
+                    message: "Header Is Here"
+                }
+            },
+            components: {
+                //referring to defined template const above
+                'my-component': MyComponent,
+                'button-component': ButtonComponent
+            }
+        });
+    </script>
+
+    
+    
+   
+
+</body>
+
+</html>
